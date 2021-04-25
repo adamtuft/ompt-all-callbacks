@@ -25,7 +25,6 @@
         if(callbacks.on_##event) {                                             \
             ompt_set_result_t r = ompt_set_callback(                           \
                 event, (ompt_callback_t) callbacks.on_##event);                \
-            FOREACH_OMPT_SET_RESULT(print_matching_set_result, r, event);      \
         }                                                                      \
     } while(0);
 

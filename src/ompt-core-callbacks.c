@@ -3,7 +3,12 @@
 #include <limits.h>
 #include <sys/time.h>       // getrusage
 #include <sys/resource.h>   // getrusage
+
+#if defined(__INTEL_COMPILER)
+#include <omp-tools.h>
+#else
 #include <ompt.h>
+#endif
 
 #include "ompt-tool-generic.h" // For the prototypes of tool_setup/tool_finalise
 #include "ompt-common.h"       // Definitions relevant to all parts of a tool
@@ -18,9 +23,39 @@ tool_setup(
     tool_callbacks_t        *callbacks,
     ompt_function_lookup_t  lookup)
 {
-    include_callback(callbacks, ompt_callback_parallel_begin);    include_callback(callbacks, ompt_callback_parallel_end);
+    include_callback(callbacks, ompt_callback_parallel_begin);
+    include_callback(callbacks, ompt_callback_parallel_end);
     include_callback(callbacks, ompt_callback_thread_begin);
     include_callback(callbacks, ompt_callback_thread_end);
+    include_callback(callbacks, ompt_callback_thread_begin);
+    include_callback(callbacks, ompt_callback_thread_end);
+    include_callback(callbacks, ompt_callback_parallel_begin);
+    include_callback(callbacks, ompt_callback_parallel_end);
+    include_callback(callbacks, ompt_callback_task_create);
+    include_callback(callbacks, ompt_callback_task_schedule);
+    include_callback(callbacks, ompt_callback_implicit_task);
+    include_callback(callbacks, ompt_callback_target);
+    include_callback(callbacks, ompt_callback_target_data_op);
+    include_callback(callbacks, ompt_callback_target_submit);
+    include_callback(callbacks, ompt_callback_device_initialize);
+    include_callback(callbacks, ompt_callback_device_finalize);
+    include_callback(callbacks, ompt_callback_device_load);
+    include_callback(callbacks, ompt_callback_device_unload);
+    include_callback(callbacks, ompt_callback_sync_region_wait);
+    include_callback(callbacks, ompt_callback_mutex_released);
+    include_callback(callbacks, ompt_callback_dependences);
+    include_callback(callbacks, ompt_callback_task_dependence);
+    include_callback(callbacks, ompt_callback_work);
+    include_callback(callbacks, ompt_callback_target_map);
+    include_callback(callbacks, ompt_callback_sync_region);
+    include_callback(callbacks, ompt_callback_lock_init);
+    include_callback(callbacks, ompt_callback_lock_destroy);
+    include_callback(callbacks, ompt_callback_mutex_acquire);
+    include_callback(callbacks, ompt_callback_mutex_acquired);
+    include_callback(callbacks, ompt_callback_nest_lock);
+    include_callback(callbacks, ompt_callback_flush);
+    include_callback(callbacks, ompt_callback_cancel);
+    include_callback(callbacks, ompt_callback_reduction);
 
     get_thread_data = (ompt_get_thread_data_t) lookup("ompt_get_thread_data");
 
@@ -30,7 +65,7 @@ tool_setup(
 void
 tool_finalise(void)
 {
-    print_resource_usage();
+    // print_resource_usage();
     return;
 }
 
@@ -50,11 +85,14 @@ print_resource_usage(void)
     #undef PRINT_RUSAGE
 }
 
+#define LOG() fprintf(stderr, "%s\n", __func__)
+
 static void
 on_ompt_callback_thread_begin(
     ompt_thread_t            thread_type,
     ompt_data_t             *thread)
 {
+    LOG();
     return;
 }
 
@@ -62,6 +100,7 @@ static void
 on_ompt_callback_thread_end(
     ompt_data_t             *thread)
 {
+    LOG();
     return;
 }
 
@@ -74,6 +113,7 @@ on_ompt_callback_parallel_begin(
     int                      flags,
     const void              *codeptr_ra)
 {
+    LOG();
     return;
 }
 
@@ -84,6 +124,7 @@ on_ompt_callback_parallel_end(
     int                      flags,
     const void              *codeptr_ra)
 {
+    LOG();
     return;
 }
 
@@ -96,6 +137,7 @@ on_ompt_callback_task_create(
     int                      has_dependences,
     const void              *codeptr_ra)
 {
+    LOG();
     return;
 }
 
@@ -105,6 +147,7 @@ on_ompt_callback_task_schedule(
     ompt_task_status_t       prior_task_status,
     ompt_data_t             *next_task)
 {
+    LOG();
     return;
 }
 
@@ -117,6 +160,7 @@ on_ompt_callback_implicit_task(
     unsigned int             index,
     int                      flags)
 {
+    LOG();
     return;
 }
 
@@ -129,6 +173,7 @@ on_ompt_callback_target(
     ompt_id_t                target_id,
     const void              *codeptr_ra)
 {
+    LOG();
     return;
 }
 
@@ -144,6 +189,7 @@ on_ompt_callback_target_data_op(
     size_t                   bytes,
     const void              *codeptr_ra)
 {
+    LOG();
     return;
 }
 
@@ -153,6 +199,7 @@ on_ompt_callback_target_submit(
     ompt_id_t                host_op_id,
     unsigned int             requested_num_teams)
 {
+    LOG();
     return;
 }
 
@@ -164,6 +211,7 @@ on_ompt_callback_device_initialize(
     ompt_function_lookup_t   lookup,
     const char              *documentation)
 {
+    LOG();
     return;
 }
 
@@ -171,6 +219,7 @@ static void
 on_ompt_callback_device_finalize(
     int                      device_num)
 {
+    LOG();
     return;
 }
 
@@ -185,6 +234,7 @@ on_ompt_callback_device_load(
     void                    *device_addr,
     uint64_t                 module_id)
 {
+    LOG();
     return;
 }
 
@@ -193,6 +243,7 @@ on_ompt_callback_device_unload(
     int                      device_num,
     uint64_t                 module_id)
 {
+    LOG();
     return;
 }
 
@@ -204,6 +255,7 @@ on_ompt_callback_sync_region_wait(
     ompt_data_t             *task,
     const void              *codeptr_ra)
 {
+    LOG();
     return;
 }
 
@@ -213,6 +265,7 @@ on_ompt_callback_mutex_released(
     ompt_wait_id_t           wait_id,
     const void              *codeptr_ra)
 {
+    LOG();
     return;
 }
 
@@ -222,6 +275,7 @@ on_ompt_callback_dependences(
     const ompt_dependence_t *deps,
     int                      ndeps)
 {
+    LOG();
     return;
 }
 
@@ -230,6 +284,7 @@ on_ompt_callback_task_dependence(
     ompt_data_t             *src_task,
     ompt_data_t             *sink_task)
 {
+    LOG();
     return;
 }
 
@@ -242,6 +297,7 @@ on_ompt_callback_work(
     uint64_t                 count,
     const void              *codeptr_ra)
 {
+    LOG();
     return;
 }
 
@@ -252,6 +308,7 @@ on_ompt_callback_master(
     ompt_data_t             *task,
     const void              *codeptr_ra)
 {
+    LOG();
     return;
 }
 
@@ -265,6 +322,7 @@ on_ompt_callback_target_map(
     unsigned int            *mapping_flags,
     const void              *codeptr_ra)
 {
+    LOG();
     return;
 }
 
@@ -276,6 +334,7 @@ on_ompt_callback_sync_region(
     ompt_data_t             *task,
     const void              *codeptr_ra)
 {
+    LOG();
     return;
 }
 
@@ -287,6 +346,7 @@ on_ompt_callback_lock_init(
     ompt_wait_id_t           wait_id,
     const void              *codeptr_ra)
 {
+    LOG();
     return;
 }
 
@@ -296,6 +356,7 @@ on_ompt_callback_lock_destroy(
     ompt_wait_id_t           wait_id,
     const void              *codeptr_ra)
 {
+    LOG();
     return;
 }
 
@@ -307,6 +368,7 @@ on_ompt_callback_mutex_acquire(
     ompt_wait_id_t           wait_id,
     const void              *codeptr_ra)
 {
+    LOG();
     return;
 }
 
@@ -316,6 +378,7 @@ on_ompt_callback_mutex_acquired(
     ompt_wait_id_t           wait_id,
     const void              *codeptr_ra)
 {
+    LOG();
     return;
 }
 
@@ -325,6 +388,7 @@ on_ompt_callback_nest_lock(
     ompt_wait_id_t           wait_id,
     const void              *codeptr_ra)
 {
+    LOG();
     return;
 }
 
@@ -333,6 +397,7 @@ on_ompt_callback_flush(
     ompt_data_t             *thread,
     const void              *codeptr_ra)
 {
+    LOG();
     return;
 }
 
@@ -342,6 +407,7 @@ on_ompt_callback_cancel(
     int                      flags,
     const void              *codeptr_ra)
 {
+    LOG();
     return;
 }
 
@@ -353,6 +419,7 @@ on_ompt_callback_reduction(
     ompt_data_t             *task,
     const void              *codeptr_ra)
 {
+    LOG();
     return;
 }
 

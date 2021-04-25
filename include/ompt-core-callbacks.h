@@ -10,7 +10,12 @@
 #include <sys/time.h>
 #include <sys/resource.h>
 
+#if defined(__INTEL_COMPILER)
+#include <omp-tools.h>
+#else
 #include <ompt.h>
+#endif
+
 
 #include "ompt-tool-generic.h" // For the prototypes of tool_setup/tool_finalise
 #include "ompt-common.h"       // Definitions relevant to all parts of a tool
@@ -25,13 +30,40 @@
 #define STR_EQUAL(a, b) (!strcmp(a,b))
 
 /* Include the function prototypes for the callbacks this tool implements */
-#define implements_callback_thread_begin   
-#define implements_callback_thread_end     
-#define implements_callback_parallel_begin 
-#define implements_callback_parallel_end   
-#define implements_callback_task_create    
-#define implements_callback_task_schedule  
+#define implements_callback_parallel_begin
+#define implements_callback_parallel_end
+#define implements_callback_thread_begin
+#define implements_callback_thread_end
+#define implements_callback_thread_begin
+#define implements_callback_thread_end
+#define implements_callback_parallel_begin
+#define implements_callback_parallel_end
+#define implements_callback_task_create
+#define implements_callback_task_schedule
 #define implements_callback_implicit_task
+#define implements_callback_target
+#define implements_callback_target_data_op
+#define implements_callback_target_submit
+#define implements_callback_device_initialize
+#define implements_callback_device_finalize
+#define implements_callback_device_load
+#define implements_callback_device_unload
+#define implements_callback_sync_region_wait
+#define implements_callback_mutex_released
+#define implements_callback_dependences
+#define implements_callback_task_dependence
+#define implements_callback_work
+#define implements_callback_target_map
+#define implements_callback_sync_region
+#define implements_callback_lock_init
+#define implements_callback_lock_destroy
+#define implements_callback_mutex_acquire
+#define implements_callback_mutex_acquired
+#define implements_callback_nest_lock
+#define implements_callback_flush
+#define implements_callback_cancel
+#define implements_callback_reduction
+
 #include "ompt-callback-prototypes.h"
 
 /* Used as an array index to keep track of unique id's for different entities */

@@ -10,7 +10,12 @@ result to stderr.
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 #include <stdio.h>
+
+#if defined(__INTEL_COMPILER)
+#include <omp-tools.h>
+#else
 #include <ompt.h>
+#endif
 
 #include "ompt-core.h"         // Macro definitions
 #include "ompt-tool-generic.h" // For the prototypes of tool_setup/tool_finalise
@@ -51,8 +56,6 @@ ompt_initialise(
     int                    initial_device_num, 
     ompt_data_t *          tool_data)
 {
-    fprintf(stderr, "tool started\n");
-
     /* Passed into the tool for it to return function pointers to its
        callbacks, or NULL for those callbacks not required. */
     static tool_callbacks_t callbacks =
@@ -77,7 +80,6 @@ ompt_finalise(
     ompt_data_t *tool_data)
 {
     tool_finalise();
-    fprintf(stderr, "tool finished\n");
     return;
 }
 

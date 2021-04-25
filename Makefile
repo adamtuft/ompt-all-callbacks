@@ -10,7 +10,7 @@ else
   LD_OMP_FLAGS=-L$(OMP_LIB)/lib/ -Wl,-rpath=$(OMP_LIB)/lib/
 endif
 
-CC=clang
+#CC=clang
 CFLAGS=-Wall -Werror -Iinclude/ -Wno-unused-function
 LDFLAGS=
 OMPTLIB=lib/libompt-core.so
