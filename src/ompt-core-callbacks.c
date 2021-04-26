@@ -297,7 +297,7 @@ on_ompt_callback_work(
     uint64_t                 count,
     const void              *codeptr_ra)
 {
-    LOG_DEBUG("%-6s %s (%lu)",
+    LOG_DEBUG("%-6s %s",
 
         endpoint == ompt_scope_begin ? "begin" : "end",
         
@@ -307,7 +307,9 @@ on_ompt_callback_work(
         wstype == ompt_work_single_other    ? "single_other" :
         wstype == ompt_work_workshare       ? "workshare" :
         wstype == ompt_work_distribute      ? "distribute" :
-        wstype == ompt_work_taskloop        ? "taskloop" : "???", count);
+        wstype == ompt_work_taskloop        ? "taskloop" : "???"
+        
+    );
 
     return;
 }
@@ -319,9 +321,9 @@ on_ompt_callback_dispatch(
     ompt_dispatch_t         kind,
     ompt_data_t             instance)
 {
-    LOG_DEBUG("%s %lu",
-        kind == ompt_dispatch_iteration ? "iteration" : "section",
-        instance.value);
+    LOG_DEBUG("%s",
+        kind == ompt_dispatch_iteration ? "iteration" : "section"
+    );
     return;
 }
 
@@ -432,7 +434,18 @@ on_ompt_callback_reduction(
     ompt_data_t             *task,
     const void              *codeptr_ra)
 {
-    LOG_DEBUG();
+    LOG_DEBUG( "%s",
+
+    kind == ompt_sync_region_barrier                ? "barrier"                :
+    kind == ompt_sync_region_barrier_implicit       ? "barrier_implicit"       :
+    kind == ompt_sync_region_barrier_explicit       ? "barrier_explicit"       :
+    kind == ompt_sync_region_barrier_implementation ? "barrier_implementation" :
+    kind == ompt_sync_region_taskwait               ? "taskwait"               :
+    kind == ompt_sync_region_taskgroup              ? "taskgroup"              :
+    kind == ompt_sync_region_reduction              ? "reduction"  : "???"
+
+    );
+
     return;
 }
 
