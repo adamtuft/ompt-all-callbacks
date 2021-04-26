@@ -63,7 +63,7 @@
 #define implements_callback_flush
 #define implements_callback_cancel
 #define implements_callback_reduction
-
+#define implements_callback_dispatch
 #include "ompt-callback-prototypes.h"
 
 /* Used as an array index to keep track of unique id's for different entities */

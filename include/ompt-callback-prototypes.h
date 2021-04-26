@@ -193,16 +193,6 @@ on_ompt_callback_work(
 );
 #endif
 
-#if defined(implements_callback_master)
-static void
-on_ompt_callback_master(
-    ompt_scope_endpoint_t    endpoint,
-    ompt_data_t             *parallel,
-    ompt_data_t             *task,
-    const void              *codeptr_ra
-);
-#endif
-
 #if defined(implements_callback_target_map)
 static void
 on_ompt_callback_target_map(
@@ -304,3 +294,12 @@ on_ompt_callback_reduction(
 );
 #endif
 
+#if defined(implements_callback_dispatch)
+static void 
+on_ompt_callback_dispatch(
+    ompt_data_t            *parallel_data,
+    ompt_data_t            *task_data,
+    ompt_dispatch_t         kind,
+    ompt_data_t             instance
+);
+#endif
